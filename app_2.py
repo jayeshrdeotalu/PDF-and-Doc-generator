@@ -3,20 +3,16 @@ from docx import Document
 import pypandoc
 
 # Load the Excel sheet
-excel_file = r'/home/om/Desktop/auto maker/info_1.xlsx'  # Replace with the actual Excel file path
+excel_file = r'/home/om/Desktop/auto maker/info_1.xlsx'  
 df = pd.read_excel(excel_file)
 
 
 
-# Iterate over the rows in the DataFrame (Excel data)
 for index, row in df.iterrows():
     print(df.iloc[index])
-    # Load the Word document template
     doc = Document(r'/home/om/Desktop/auto maker/autofill_temp.docx')
 
-    # Create a copy of the document to modify
     new_doc = doc
-    # Replace placeholders with actual data
     for paragraph in new_doc.paragraphs:
         if '{Name}' in paragraph.text:
             paragraph.text = paragraph.text.replace('{Name}', str(row['PERSONAL INFORMATION']))
@@ -40,7 +36,6 @@ for index, row in df.iterrows():
             paragraph.text = paragraph.text.replace('{ANS}', str(row['Additional Information:']) if row['Additional Information:'] else "")
     
 
-    # Save the filled document with a new name
     docx_filename = f'/home/om/Desktop/auto maker/generated/filled_form_{str(row['PERSONAL INFORMATION'])}.docx'
     new_doc.save(docx_filename)
 

@@ -1,16 +1,15 @@
 import pandas as pd
 from docx import Document
-import pypandoc
+from docx2pdf import convert
 
 # Load the Excel sheet
-excel_file = r'/home/om/Desktop/auto maker/info_1.xlsx'  
+excel_file = r'info_1.xlsx'  
 df = pd.read_excel(excel_file)
 
 
 
 for index, row in df.iterrows():
-    print(df.iloc[index])
-    doc = Document(r'/home/om/Desktop/auto maker/autofill_temp.docx')
+    doc = Document(r'autofill_temp.docx')
 
     new_doc = doc
     for paragraph in new_doc.paragraphs:
@@ -36,10 +35,10 @@ for index, row in df.iterrows():
             paragraph.text = paragraph.text.replace('{ANS}', str(row['Additional Information:']) if row['Additional Information:'] else "")
     
 
-    docx_filename = f'/home/om/Desktop/auto maker/generated/filled_form_{str(row['PERSONAL INFORMATION'])}.docx'
+    docx_filename = f'generated/filled_form_{str(row['PERSONAL INFORMATION'])}.docx'
     new_doc.save(docx_filename)
 
-    pdf_filename = f'/home/om/Desktop/auto maker/member_pdf/{str(row["PERSONAL INFORMATION"])}_application.pdf'
-    pypandoc.convert_file(docx_filename, 'pdf', outputfile=pdf_filename)
+    pdf_filename = f'member_pdf/{str(row["PERSONAL INFORMATION"])}_application.pdf'
+    convert(docx_filename, pdf_filename)
     
 print("Forms have been successfully auto-filled.")  

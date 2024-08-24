@@ -1,6 +1,7 @@
 import pandas as pd
 from docx import Document
 from docx2pdf import convert
+import os 
 
 # Load the Excel sheet
 excel_file = r'info_1.xlsx'  
@@ -15,6 +16,10 @@ for index, row in df.iterrows():
     for paragraph in new_doc.paragraphs:
         if '{Name}' in paragraph.text:
             paragraph.text = paragraph.text.replace('{Name}', str(row['PERSONAL INFORMATION']))
+            pdf_filename = f'{str(row["PERSONAL INFORMATION"])}_application.pdf'
+            if pdf_filename in os.listdir('member_pdf'):
+                print("PDF Already Present")
+                continue
         if '{STID}' in paragraph.text:
             paragraph.text = paragraph.text.replace('{STID}', str(row['STUDENT ID']))
         if '{EMAIL}' in paragraph.text:
@@ -41,4 +46,5 @@ for index, row in df.iterrows():
     pdf_filename = f'member_pdf/{str(row["PERSONAL INFORMATION"])}_application.pdf'
     convert(docx_filename, pdf_filename)
     
-print("Forms have been successfully auto-filled.")  
+print("Forms have been successfully auto-filled.")
+print(" No of forms : ", len(os.listdir('member_pdf')))  
